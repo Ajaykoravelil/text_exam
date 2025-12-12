@@ -1,0 +1,2714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Exam</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a192f;
+            color: #e6f1ff;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 15% 50%, rgba(28, 58, 112, 0.1) 0%, transparent 20%),
+                              radial-gradient(circle at 85% 30%, rgba(19, 41, 75, 0.1) 0%, transparent 20%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 0 30px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #64ffda;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+        
+        .subtitle {
+            color: #a8b2d1;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .quiz-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .question-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(17, 34, 64, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .controls-section {
+            flex: 0 0 300px;
+            background: rgba(17, 34, 64, 0.7);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .question-counter {
+            color: #64ffda;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .question-text {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            color: #ccd6f6;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .option {
+            padding: 16px 20px;
+            background: rgba(23, 42, 76, 0.8);
+            border: 2px solid rgba(100, 255, 218, 0.1);
+            border-radius: 8px;
+            color: #a8b2d1;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .option:hover {
+            background: rgba(35, 53, 94, 0.8);
+            border-color: rgba(100, 255, 218, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .option.selected {
+            background: rgba(28, 58, 112, 0.9);
+            border-color: #64ffda;
+            color: #64ffda;
+        }
+        
+        .option.correct {
+            background: rgba(40, 167, 69, 0.2);
+            border-color: #28a745;
+            color: #28a745;
+        }
+        
+        .option.incorrect {
+            background: rgba(220, 53, 69, 0.2);
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        
+        .option-number {
+            width: 30px;
+            height: 30px;
+            background: rgba(100, 255, 218, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .selected .option-number, .correct .option-number, .incorrect .option-number {
+            background: rgba(100, 255, 218, 0.3);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background-color: #0a192f;
+            color: #64ffda;
+            border: 2px solid #64ffda;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: rgba(100, 255, 218, 0.1);
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: rgba(220, 53, 69, 0.2);
+            box-shadow: 0 0 15px rgba(220, 53, 69, 0.2);
+        }
+        
+        .btn-success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #64ffda;
+            border: 2px solid #64ffda;
+        }
+        
+        .btn-success:hover:not(:disabled) {
+            background-color: rgba(40, 167, 69, 0.2);
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.2);
+        }
+        
+        .score-display {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(23, 42, 76, 0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+        
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+        
+        .score-label {
+            color: #a8b2d1;
+            font-size: 1.1rem;
+        }
+        
+        .timer-display {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(23, 42, 76, 0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .timer-display.hidden {
+            display: none;
+        }
+        
+        .timer-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+        
+        .timer-label {
+            color: #a8b2d1;
+            font-size: 1.1rem;
+        }
+        
+        .quiz-progress {
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: rgba(23, 42, 76, 0.8);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0a192f, #64ffda);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            color: #a8b2d1;
+            font-size: 0.95rem;
+        }
+        
+        .history-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .history-title {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .history-item {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background: rgba(23, 42, 76, 0.5);
+            border-radius: 6px;
+            border-left: 3px solid #64ffda;
+            font-size: 0.95rem;
+        }
+        
+        .history-item.correct {
+            border-left-color: #28a745;
+        }
+        
+        .history-item.incorrect {
+            border-left-color: #dc3545;
+        }
+        
+        .question-history {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .question-history-title {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .question-history-text {
+            color: #a8b2d1;
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+        
+        .shuffle-info {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64ffda;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+            color: #64ffda;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+            color: #8892b0;
+            font-size: 0.9rem;
+        }
+        
+        /* Results Modal */
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 25, 47, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .results-modal.show {
+            display: flex;
+        }
+        
+        .results-content {
+            background: rgba(17, 34, 64, 0.95);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid #64ffda;
+            text-align: center;
+        }
+        
+        .results-title {
+            color: #64ffda;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+        
+        .results-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .stat-box {
+            background: rgba(23, 42, 76, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 150px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #64ffda;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #a8b2d1;
+            font-size: 1rem;
+        }
+        
+        .time-breakdown {
+            background: rgba(23, 42, 76, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .time-breakdown-title {
+            color: #64ffda;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            text-align: center;
+        }
+        
+        .time-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        }
+        
+        .time-label {
+            color: #a8b2d1;
+        }
+        
+        .time-value {
+            color: #64ffda;
+            font-weight: bold;
+        }
+        
+        .results-message {
+            color: #ccd6f6;
+            font-size: 1.2rem;
+            margin: 25px 0;
+            line-height: 1.6;
+        }
+        
+        .results-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+        }
+        
+        .review-mode-banner {
+            background: rgba(100, 255, 218, 0.15);
+            border: 1px solid #64ffda;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #64ffda;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .quiz-area {
+                flex-direction: column;
+            }
+            
+            .controls-section {
+                flex: 1;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .question-text {
+                font-size: 1.2rem;
+            }
+            
+            .results-content {
+                padding: 25px;
+            }
+            
+            .stat-box {
+                min-width: 120px;
+            }
+            
+            .results-stats {
+                gap: 10px;
+            }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(23, 42, 76, 0.5);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #64ffda;
+            border-radius: 10px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: rgba(23, 42, 76, 0.95);
+            border-radius: 8px;
+            border-left: 4px solid #64ffda;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            color: #ccd6f6;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.5s;
+            max-width: 400px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.correct {
+            border-left-color: #28a745;
+        }
+        
+        .notification.incorrect {
+            border-left-color: #dc3545;
+        }
+        
+        .notification.info {
+            border-left-color: #17a2b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-shield-alt"></i> Demo Exam</h1>
+            <p class="subtitle">Test your knowledge and best practices for exam. Complete all questions to see your final score and completion time.</p>
+        </header>
+        
+        <div class="quiz-area">
+            <section class="question-section">
+                <div class="question-counter">
+                    <span>Question <span id="current-question">1</span> of <span id="total-questions">8</span></span>
+                    <span id="question-category" class="question-category">Cybersecurity Fundamentals</span>
+                </div>
+                
+                <div id="review-mode-banner" class="review-mode-banner" style="display: none;">
+                    <i class="fas fa-search"></i> Review Mode
+                </div>
+                
+                <div class="question-text" id="question-text">
+                    What does the term 'situational awareness' refer to in cybersecurity?
+                </div>
+                
+                <div class="options" id="options-container">
+                    <!-- Options will be populated by JavaScript -->
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="previous-btn" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button id="submit-btn" class="btn-primary">
+                        Submit Answer <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button id="next-btn" class="btn-success">
+                        Next Question <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                
+                <div class="shuffle-info" id="shuffle-info">
+                    <i class="fas fa-random"></i> Questions and answer options are shuffled on each reset
+                </div>
+            </section>
+            
+            <section class="controls-section">
+                <div class="timer-display" id="timer-display">
+                    <div class="timer-value" id="timer">00:00</div>
+                    <div class="timer-label">Exam Time</div>
+                </div>
+                
+                <div class="score-display">
+                    <div class="score-value" id="score">0</div>
+                    <div class="score-label">Current Score</div>
+                </div>
+                
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Progress</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button disabled id="hint-btn" class="btn-secondary">
+                        <i class="fas fa-lightbulb "></i> Hint
+                    </button>
+                    <button id="reset-btn" class="btn-secondary">
+                        <i class="fas fa-random"></i> Reset Exam
+                    </button>
+                </div>
+                
+                <div class="history-section">
+                    <div class="history-title">
+                        <i class="fas fa-history"></i> Recent Answers
+                    </div>
+                    <div class="history-list" id="history-list">
+                        <!-- History items will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="question-history">
+                    <div class="question-history-title">
+                        <i class="fas fa-question-circle"></i> Question History
+                    </div>
+                    <p class="question-history-text" id="question-history-text">
+                        This is the first question of the quiz. Answer options are randomly ordered each time you reset the quiz.
+                    </p>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p> Designed And Developed By 😎</p>
+        </footer>
+    </div>
+    
+    <!-- Results Modal -->
+    <div class="results-modal" id="results-modal">
+        <div class="results-content">
+            <h2 class="results-title"><i class="fas fa-trophy"></i> Exam Completed!</h2>
+            
+            <div class="results-stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="final-score">0</div>
+                    <div class="stat-label">Final Score</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-value" id="final-time">00:00</div>
+                    <div class="stat-label">Total Time</div>
+                </div>
+                
+                <div class="stat-box">
+                    <div class="stat-value" id="correct-count">0/8</div>
+                    <div class="stat-label">Correct Answers</div>
+                </div>
+            </div>
+            
+            <div class="time-breakdown">
+                <h3 class="time-breakdown-title"><i class="fas fa-clock"></i> Time Breakdown</h3>
+                <div class="time-item">
+                    <span class="time-label">Started at:</span>
+                    <span class="time-value" id="start-time">00:00:00</span>
+                </div>
+                <div class="time-item">
+                    <span class="time-label">Completed at:</span>
+                    <span class="time-value" id="end-time">00:00:00</span>
+                </div>
+                <div class="time-item">
+                    <span class="time-label">Time per question:</span>
+                    <span class="time-value" id="time-per-question">0s</span>
+                </div>
+            </div>
+            
+            <div class="results-message" id="results-message">
+                Congratulations on completing the  Exam! You've demonstrated good knowledge of security concepts.
+            </div>
+            
+            <div class="results-buttons">
+                <button id="review-btn" class="btn-primary">
+                    <i class="fas fa-chart-bar"></i> Review Answers
+                </button>
+                <button id="new-quiz-btn" class="btn-success">
+                    <i class="fas fa-redo"></i> New Quiz
+                </button>
+                <button id="close-results-btn" class="btn-secondary">
+                    <i class="fas fa-times"></i> Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div class="notification-text">Your answer has been submitted successfully!</div>
+    </div>
+
+    <script>
+        // Original Quiz Data
+        const originalQuizData = [
+             {
+                question: "What does the term 'situational awareness' refer to in cybersecurity?",
+                options: [
+                    "Monitoring employee behavior for productivity improvements",
+                    "Understanding the current security landscape and potential threats",
+                    "Focusing only on past security incidents without current relevance",
+                    "Conducting regular audits of physical security measures"
+                ],
+                correctAnswer: 1,
+                category: "Cybersecurity Fundamentals",
+                hint: "Situational awareness involves being aware of what is happening around you to understand how information, events, and actions will impact your organization's security."
+            },
+            {
+                question: "Which of the following is the primary purpose of a firewall?",
+                options: [
+                    "To prevent physical break-ins",
+                    "To monitor and control incoming and outgoing network traffic",
+                    "To encrypt sensitive data",
+                    "To detect viruses in email attachments"
+                ],
+                correctAnswer: 1,
+                category: "Network Security",
+                hint: "A firewall acts as a barrier between a trusted internal network and untrusted external networks, controlling traffic based on security rules."
+            },
+            {
+                question: "What is phishing in the context of cybersecurity?",
+                options: [
+                    "A method to improve network speed",
+                    "A technique to encrypt data for security",
+                    "A fraudulent attempt to obtain sensitive information by disguising as a trustworthy entity",
+                    "A process for backing up data"
+                ],
+                correctAnswer: 2,
+                category: "Threats & Attacks",
+                hint: "Phishing attacks often use deceptive emails or websites that appear to be from legitimate sources to trick users into revealing personal information."
+            },
+            {
+                question: "What does the principle of 'least privilege' mean in access control?",
+                options: [
+                    "Users should have unlimited access to all systems",
+                    "Users should only have the access necessary to perform their job functions",
+                    "All users should have the same level of access",
+                    "Access should be granted based on seniority"
+                ],
+                correctAnswer: 1,
+                category: "Access Control",
+                hint: "The principle of least privilege minimizes the attack surface by ensuring users, programs, and systems have only the minimum access needed."
+            },
+            {
+                question: "Which of these is an example of multi-factor authentication?",
+                options: [
+                    "A password and a security question",
+                    "A password and a fingerprint scan",
+                    "Two different passwords",
+                    "A username and a password"
+                ],
+                correctAnswer: 1,
+                category: "Authentication",
+                hint: "Multi-factor authentication combines two or more independent credentials: what the user knows (password), what the user has (security token), and what the user is (biometric verification)."
+            },
+            {
+                question: "What is the main purpose of encryption in cybersecurity?",
+                options: [
+                    "To increase data transmission speed",
+                    "To protect data confidentiality by converting it into unreadable format",
+                    "To compress data for storage efficiency",
+                    "To create backup copies of important files"
+                ],
+                correctAnswer: 1,
+                category: "Cryptography",
+                hint: "Encryption transforms data into a coded form that can only be accessed by authorized parties with the correct decryption key."
+            },
+            {
+                question: "What is a zero-day vulnerability?",
+                options: [
+                    "A vulnerability that is discovered and patched on the same day",
+                    "A security flaw that is unknown to the software vendor",
+                    "A vulnerability that affects systems running for zero days",
+                    "A bug that only appears at midnight"
+                ],
+                correctAnswer: 1,
+                category: "Vulnerabilities",
+                hint: "A zero-day vulnerability is a software flaw that is unknown to the vendor and for which no patch is available, making it particularly dangerous."
+            },
+            {
+                question: "What does VPN stand for in cybersecurity?",
+                options: [
+                    "Virtual Private Network",
+                    "Verified Protection Node",
+                    "Virus Prevention Network",
+                    "Virtual Protocol Navigation"
+                ],
+                correctAnswer: 0,
+                category: "Network Security",
+                hint: "A VPN creates a secure, encrypted connection over a less secure network, such as the internet, to protect data in transit."
+            },
+            {
+                question: "Robin, a SOC engineer in a multinational company, is planning to implement a SIEM. He realized that his organization is capable of performing only Correlation, Analytics, Reporting, Retention, Alerting, and Visualization required for the SIEM implementation and has to take collection and aggregation services from a Managed Security Services Provider (MSSP). What kind of SIEM is Robin planning to implement?",
+                options: [
+                    "Self-hosted, Self-Managed",
+                    "Self-hosted, MSSP Managed",
+                    "Hybrid Model, Jointly Managed",
+                    "Cloud, Self-Managed"
+                ],
+                correctAnswer: 3,
+                category: "SOC & SIEM",
+                hint: "This is a hybrid approach where the organization hosts the SIEM but outsources certain functions to an MSSP."
+            },
+            {
+                question: "What type of event is recorded when an application driver loads successfully in Windows?",
+                options: [
+                    "Error",
+                    "Success Audit",
+                    "Warning",
+                    "Information"
+                ],
+                correctAnswer: 3,
+                category: "Windows Events",
+                hint: "Information events record successful operations, such as a driver loading successfully."
+            },
+            {
+                question: "An attacker exploits the logic validation mechanisms of an e-commerce website. He successfully purchases a product worth $100 for $10 by modifying the URL exchanged between the client and the server. Identify the attack depicted in the above scenario.",
+                options: [
+                    "Denial-of-Service Attack",
+                    "SQL Injection Attack",
+                    "Parameter Tampering Attack",
+                    "Session Fixation Attack"
+                ],
+                correctAnswer: 2,
+                category: "Web Attacks",
+                hint: "This attack involves modifying parameters in a URL to manipulate application behavior."
+            },
+            {
+                question: "John, a threat analyst at GreenTech Solutions, wants to gather information about specific threats against the organization. He started collecting information from various sources, such as humans, social media, chat room, and so on, and created a report that contains malicious activity. Which of the following types of threat intelligence did he use?",
+                options: [
+                    "Strategic Threat Intelligence",
+                    "Technical Threat Intelligence",
+                    "Tactical Threat Intelligence",
+                    "Operational Threat Intelligence"
+                ],
+                correctAnswer: 3,
+                category: "Threat Intelligence",
+                hint: "Operational threat intelligence focuses on specific threats and attacks against the organization."
+            },
+            {
+                question: "Which of the following is a default directory in a Mac OS X that stores security-related logs?",
+                options: [
+                    "/private/var/log",
+                    "/Library/Logs/Sync",
+                    "/var/log/cups/access_log",
+                    "~/Library/Logs"
+                ],
+                correctAnswer: 0,
+                category: "Log Management",
+                hint: "This is the default directory for system logs in macOS."
+            },
+            {
+                question: "John, SOC analyst wants to monitor the attempt of process creation activities from any of their Windows endpoints. Which of following Splunk query will help him to fetch related logs associated with process creation?",
+                options: [
+                    "index=windows LogName=Security EventCode=4678 NOT (Account_Name=*$)",
+                    "index=windows LogName=Security EventCode=4688 NOT (Account_Name=*$)",
+                    "index=windows LogName=Security EventCode=3688 NOT (Account_Name=*$)",
+                    "index=windows LogName=Security EventCode=5688 NOT (Account_Name=*$)"
+                ],
+                correctAnswer: 1,
+                category: "SIEM & Log Analysis",
+                hint: "Event ID 4688 in Windows Security logs indicates a new process has been created."
+            },
+            {
+                question: "Harley is working as a SOC analyst with Powell Tech. Powell Inc. is using Internet Information Service (IIS) version 7.0 to host their website. Where will Harley find the web server logs, if he wants to investigate them for any anomalies?",
+                options: [
+                    "SystemDrive%\\inetpub\\logs\\LogFiles\\W3SVCN",
+                    "SystemDrive%\\LogFiles\\inetpub\\logs\\W3SVCN",
+                    "%SystemDrive%\\LogFiles\\logs\\W3SVCN",
+                    "SystemDrive%\\inetpub\\LogFiles\\logs\\W3SVCN"
+                ],
+                correctAnswer: 0,
+                category: "Web Server Security",
+                hint: "This is the default location for IIS 7.0 web server logs."
+            },
+            {
+                question: "What does the Security Log Event ID 4624 of Windows 10 indicate?",
+                options: [
+                    "Service added to the endpoint",
+                    "A share was assessed",
+                    "An account was successfully logged on",
+                    "New process executed"
+                ],
+                correctAnswer: 2,
+                category: "Windows Security",
+                hint: "Event ID 4624 records successful logon events in Windows."
+            },
+            {
+                question: "Which of the following is a set of standard guidelines for ongoing development, enhancement, storage, dissemination and implementation of security standards for account data protection?",
+                options: [
+                    "FISMA",
+                    "HIPAA",
+                    "PCI-DSS",
+                    "DARPA"
+                ],
+                correctAnswer: 2,
+                category: "Security Standards",
+                hint: "This standard is specifically for payment card industry data security."
+            },
+            {
+                question: "What does the HTTP status code 1XX represents?",
+                options: [
+                    "Informational message",
+                    "Client error",
+                    "Success",
+                    "Redirection"
+                ],
+                correctAnswer: 0,
+                category: "Web Security",
+                hint: "1XX status codes are informational responses that indicate the request was received and understood."
+            },
+            {
+                question: "In which phase of Lockheed Martin's Cyber Kill Chain Methodology, adversary creates a deliverable malicious payload using an exploit and a backdoor?",
+                options: [
+                    "Reconnaissance",
+                    "Delivery",
+                    "Weaponization",
+                    "Exploitation"
+                ],
+                correctAnswer: 2,
+                category: "Cyber Kill Chain",
+                hint: "Weaponization involves creating the actual malware payload."
+            },
+
+             {
+                question: "Which of the following service provides phishing protection and content filtering to manage the Internet experience on and off your network with the acceptable use or compliance policies?",
+                options: [
+                    "Apility.io",
+                    "Malstrom",
+                    "1-Blocklist",
+                    "OpenDNS"
+                ],
+                correctAnswer: 3,
+                category: "Phishing",
+                hint: "Dns"
+            },
+
+            {
+                question: "Identify the attack, where an attacker tries to discover all the possible information about a target network before launching a further attack.",
+                options: [
+                    "DoS Attack",
+                    "Man-In-Middle Attack",
+                    "Ransomware Attack",
+                    "Reconnaissance Attack"
+                ],
+                correctAnswer: 3,
+                category: "Network Attacks",
+                hint: "This is the information gathering phase before an actual attack."
+            },
+            {
+                question: "What does [-n] in the following checkpoint firewall log syntax represents? fw log [-f [-t]] [-n] [-l] [-o] [-c action] [-h host] [-s starttime] [-e endtime] [-b starttime endtime] [-u unification_scheme_file] [-m unification_mode(initial[semi|raw]) [-a] [-k (alert name|all)] [-g] [logfile]",
+                options: [
+                    "Speed up the process by not performing IP addresses DNS resolution in the Log files",
+                    "Display both the date and the time for each log record",
+                    "Display account log records only",
+                    "Display detailed log chains (all the log segments a log record consists of)"
+                ],
+                correctAnswer: 0,
+                category: "Firewall Logs",
+                hint: "The -n flag typically disables DNS resolution to speed up log processing."
+            },
+            {
+                question: "Which of the following attack inundates DHCP servers with fake DHCP requests to exhaust all available IP addresses?",
+                options: [
+                    "DHCP Starvation Attacks",
+                    "DHCP Spoofing Attack",
+                    "DHCP Port Stealing",
+                    "DHCP Cache Poisoning"
+                ],
+                correctAnswer: 0,
+                category: "Network Attacks",
+                hint: "This attack floods the DHCP server to exhaust the IP address pool."
+            },
+            {
+                question: "Mike is an incident handler for PNP Infosystems Inc. One day, there was a ticket raised regarding a critical incident and Mike was assigned to handle the incident. During the process of incident handling, at one stage, he has performed incident analysis and validation to check whether the incident is a true incident or a false positive. Identify the stage in which he is currently in.",
+                options: [
+                    "Post-Incident Activities",
+                    "Incident Recording and Assignment",
+                    "Incident Triage",
+                    "Incident Disclosure"
+                ],
+                correctAnswer: 2,
+                category: "Incident Response",
+                hint: "Triage involves initial analysis and prioritization of incidents."
+            },
+            {
+                question: "Bonney's system has been compromised by a gruesome malware. What is the primary step that is advisable to Bonney in order to contain the malware incident from spreading?",
+                options: [
+                    "Complaint to police in a formal way regarding the incident",
+                    "Turn off the infected machine",
+                    "Leave it to the network administrators to handle",
+                    "Call the legal department in the organization and inform about the incident"
+                ],
+                correctAnswer: 1,
+                category: "Malware Response",
+                hint: "The immediate step is to isolate the infected system to prevent further spread."
+            },
+            {
+                question: "According to the forensics investigation process, what is the next step carried out right after collecting the evidence?",
+                options: [
+                    "Create a Chain of Custody Document",
+                    "Send it to the nearby police station",
+                    "Set a Forensic lab",
+                    "Call Organizational Disciplinary Team"
+                ],
+                correctAnswer: 0,
+                category: "Digital Forensics",
+                hint: "Chain of custody documentation is critical for maintaining evidence integrity."
+            },
+            {
+                question: "Which one of the following is the correct flow for Setting Up a Computer Forensics Lab?",
+                options: [
+                    "Planning and budgeting → Physical location and structural design considerations → Work area considerations → Human resource considerations → Physical security recommendations → Forensics lab licensing",
+                    "Planning and budgeting → Physical location and structural design considerations → Forensics lab licensing → Human resource considerations → Work area considerations → Physical security recommendations",
+                    "Planning and budgeting → Forensics lab licensing → Physical location and structural design considerations → Work area considerations → Physical security recommendations → Human resource considerations",
+                    "Planning and budgeting → Physical location and structural design considerations → Forensics lab licensing → Work area considerations → Human resource considerations → Physical security recommendations"
+                ],
+                correctAnswer: 0,
+                category: "Digital Forensics",
+                hint: "Proper planning and physical setup come before licensing and human resources."
+            },
+            {
+                question: "Which of the following directory will contain logs related to printer access?",
+                options: [
+                    "/var/log/cups/Printer_log file",
+                    "/var/log/cups/access_log file",
+                    "/var/log/cups/accesslog file",
+                    "/var/log/cups/Printeraccess_log file"
+                ],
+                correctAnswer: 1,
+                category: "Linux Logs",
+                hint: "CUPS (Common Unix Printing System) stores access logs in this location."
+            },
+            {
+                question: "Which of the following command is used to enable logging in iptables?",
+                options: [
+                    "$ iptables -B INPUT -j LOG",
+                    "$ iptables -A OUTPUT -j LOG",
+                    "$ iptables -A INPUT -j LOG",
+                    "$ iptables -B OUTPUT -j LOG"
+                ],
+                correctAnswer: 2,
+                category: "Firewall Configuration",
+                hint: "The correct syntax is 'iptables -A INPUT -j LOG' to log incoming traffic."
+            },
+            {
+                question: "Ray is a SOC analyst in a company named Queens Tech. One Day, Queens Tech is affected by a DoS/DDoS attack. For the containment of this incident, Ray and his team are trying to provide additional bandwidth to the network devices and increasing the capacity of the servers. What is Ray and his team doing?",
+                options: [
+                    "Blocking the Attacks",
+                    "Diverting the Traffic",
+                    "Degrading the services",
+                    "Absorbing the Attack"
+                ],
+                correctAnswer: 3,
+                category: "DoS/DDoS Response",
+                hint: "Increasing capacity to handle the attack traffic is called absorbing the attack."
+            },
+            {
+                question: "Identify the attack when an attacker by several trial and error can read the contents of a password file present in the restricted etc folder just by manipulating the URL in the browser as shown: http://www.terabytes.com/process.php../../../etc/passwd",
+                options: [
+                    "Directory Traversal Attack",
+                    "SQL Injection Attack",
+                    "Denial-of-Service Attack",
+                    "Form Tampering Attack"
+                ],
+                correctAnswer: 0,
+                category: "Web Attacks",
+                hint: "This attack exploits insufficient security validation to access files outside the web root directory."
+            },
+            {
+                question: "Which encoding replaces unusual ASCII characters with '%' followed by the character's two-digit ASCII code expressed in hexadecimal?",
+                options: [
+                    "Unicode Encoding",
+                    "UTF Encoding",
+                    "Base64 Encoding",
+                    "URL Encoding"
+                ],
+                correctAnswer: 3,
+                category: "Web Security",
+                hint: "URL encoding is used to represent special characters in URLs."
+            },
+            {
+                question: "Which of the following formula represents the risk?",
+                options: [
+                    "Risk = Likelihood × Severity × Asset Value",
+                    "Risk = Likelihood × Consequence × Severity",
+                    "Risk = Likelihood × Impact × Severity",
+                    "Risk = Likelihood × Impact × Asset Value"
+                ],
+                correctAnswer: 3,
+                category: "Risk Management",
+                hint: "The standard risk formula multiplies likelihood, impact, and asset value."
+            },
+            {
+                question: "The Syslog message severity levels are labelled from level 0 to level 7. What does level 0 indicate?",
+                options: [
+                    "Alert",
+                    "Notification",
+                    "Emergency",
+                    "Debugging"
+                ],
+                correctAnswer: 2,
+                category: "Log Management",
+                hint: "Syslog level 0 is the highest severity level indicating system is unusable."
+            },
+            {
+                question: "Where will you find the reputation IP database, if you want to monitor traffic from known bad IP reputation using OSSIM SIEM?",
+                options: [
+                    "/etc/ossim/reputation",
+                    "/etc/ossim/siem/server/reputation/data",
+                    "/etc/siem/ossim/server/reputation.data",
+                    "/etc/ossim/server/reputation.data"
+                ],
+                correctAnswer: 3,
+                category: "SIEM Configuration",
+                hint: "OSSIM stores reputation data in this directory structure."
+            },
+            {
+                question: "According to the Risk Matrix table, what will be the risk level when the probability of an attack is very low and the impact of that attack is major?",
+                options: [
+                    "High",
+                    "Extreme",
+                    "Low",
+                    "Medium"
+                ],
+                correctAnswer: 3,
+                category: "Risk Management",
+                hint: "Low probability but major impact typically results in medium risk."
+            },
+            {
+                question: "Which of the following command is used to view iptables logs on Ubuntu and Debian distributions?",
+                options: [
+                    "$ tailf /var/log/sys/kern.log",
+                    "$ tailf /var/log/kern.log",
+                    "# tailf /var/log/messages",
+                    "# tailf /var/log/sys/messages"
+                ],
+                correctAnswer: 1,
+                category: "Linux Security",
+                hint: "Kernel logs on Ubuntu/Debian systems are typically found in /var/log/kern.log."
+            },
+            {
+                question: "Which of the following technique involves scanning the headers of IP packets leaving a network to make sure that the unauthorized or malicious traffic never leaves the internal network?",
+                options: [
+                    "Egress Filtering",
+                    "Throttling",
+                    "Rate Limiting",
+                    "Ingress Filtering"
+                ],
+                correctAnswer: 0,
+                category: "Network Security",
+                hint: "Egress filtering controls outbound traffic from a network."
+            },
+            {
+                question: "Which of the following formula is used to calculate the EPS of the organization?",
+                options: [
+                    "EPS = average number of correlated events / time in seconds",
+                    "EPS = number of normalized events / time in seconds",
+                    "EPS = number of security events / time in seconds",
+                    "EPS = number of correlated events / time in seconds"
+                ],
+                correctAnswer: 2,
+                category: "SIEM Metrics",
+                hint: "EPS stands for Events Per Second, a key SIEM performance metric."
+            },
+            {
+                question: "Juliea a SOC analyst, while monitoring logs, noticed large TXT, NULL payloads. What does this indicate?",
+                options: [
+                    "Concurrent VPN Connections Attempt",
+                    "DNS Exfiltration Attempt",
+                    "Covering Tracks Attempt",
+                    "DHCP Starvation Attempt"
+                ],
+                correctAnswer: 1,
+                category: "Network Analysis",
+                hint: "Large TXT records in DNS can be used for data exfiltration."
+            },
+            {
+                question: "What is the process of monitoring and capturing all data packets passing through a given network using different tools?",
+                options: [
+                    "Network Scanning",
+                    "DNS Footprinting",
+                    "Network Sniffing",
+                    "Port Scanning"
+                ],
+                correctAnswer: 2,
+                category: "Network Security",
+                hint: "Network sniffing involves capturing and analyzing network traffic."
+            },
+            {
+                question: "Which of the following is a report writing tool that will help incident handlers to generate efficient reports on detected incidents during incident response process?",
+                options: [
+                    "threat_note",
+                    "MagicTree",
+                    "IntelMQ",
+                    "Malstrom"
+                ],
+                correctAnswer: 1,
+                category: "Incident Response Tools",
+                hint: "MagicTree is a data organizing and reporting tool for incident response."
+            },
+            {
+                question: "Which of the following Windows features is used to enable Security Auditing in Windows?",
+                options: [
+                    "Bitlocker",
+                    "Windows Firewall",
+                    "Local Group Policy Editor",
+                    "Windows Defender"
+                ],
+                correctAnswer: 2,
+                category: "Windows Security",
+                hint: "Security auditing policies are configured through the Local Group Policy Editor."
+            },
+            {
+                question: "Which of the following attack can be eradicated by filtering improper XML syntax?",
+                options: [
+                    "CAPTCHA Attacks",
+                    "SQL Injection Attacks",
+                    "Insufficient Logging and Monitoring Attacks",
+                    "Web Services Attacks"
+                ],
+                correctAnswer: 3,
+                category: "Application Security",
+                hint: "XML filtering helps prevent various web service attacks like XXE."
+            },
+            {
+                question: "Which of the following attack can be eradicated by using a safe API to avoid the use of the interpreter entirely?",
+                options: [
+                    "Command Injection Attacks",
+                    "SQL Injection Attacks",
+                    "File Injection Attacks",
+                    "LDAP Injection Attacks"
+                ],
+                correctAnswer: 0,
+                category: "Application Security",
+                hint: "Using parameterized queries or safe APIs prevents SQL injection by avoiding direct interpreter use."
+            },
+            {
+                question: "Which of the following technique protects from flooding attacks originated from the valid prefixes (IP addresses) so that they can be traced to its true source?",
+                options: [
+                    "Ingress Filtering",
+                    "Rate Limiting",
+                    "Throttling",
+                    "Egress Filtering"
+                ],
+                correctAnswer: 0,
+                category: "Network Security",
+                hint: "Ingress filtering validates incoming traffic to prevent spoofed source IP attacks."
+            },
+            {
+                question: "Shawn is a security manager working at Lee Inc Solution. His organization wants to develop threat intelligent strategy plan. As a part of threat intelligent strategy plan, he suggested various components, such as threat intelligence requirement analysis, intelligence and collection planning, asset identification, threat reports, and intelligence buy-in. Which one of the following components he should include in the above threat intelligent strategy plan to make it effective?",
+                options: [
+                    "Threat pivoting",
+                    "Threat trending",
+                    "Threat buy-in",
+                    "Threat boosting"
+                ],
+                correctAnswer: 2,
+                category: "Threat Intelligence",
+                hint: "Threat buy-in ensures organizational support for the threat intelligence program."
+            },
+            {
+                question: "Which of the following can help you eliminate the burden of investigating false positives?",
+                options: [
+                    "Keeping default rules",
+                    "Not trusting the security devices",
+                    "Treating every alert as high level",
+                    "Ingesting the context data"
+                ],
+                correctAnswer: 3,
+                category: "SOC Operations",
+                hint: "Context data helps differentiate between true threats and false positives."
+            },
+            {
+                question: "Which of the following event detection techniques uses User and Entity Behavior Analytics (UEBA)?",
+                options: [
+                    "Rule-based detection",
+                    "Heuristic-based detection",
+                    "Anomaly-based detection",
+                    "Signature-based detection"
+                ],
+                correctAnswer: 2,
+                category: "Security Analytics",
+                hint: "UEBA uses machine learning to detect anomalies in user behavior."
+            },
+            {
+                question: "According to the Risk Matrix table, what will be the risk level when the probability of an attack is very high, and the impact of that attack is major?",
+                options: [
+                    "High",
+                    "Extreme",
+                    "Low",
+                    "Medium"
+                ],
+                correctAnswer: 1,
+                category: "Risk Management",
+                hint: "High probability combined with major impact results in extreme risk."
+            },
+            {
+                question: "What is the correct sequence of SOC Workflow?",
+                options: [
+                    "Collect, Ingest, Validate, Document, Report, Respond",
+                    "Collect, Digest, Document, Validate, Report, Respond",
+                    "Collect, Respond, Validate, Digest, Report, Document",
+                    "Collect, Ingest, Validate, Report, Respond, Document"
+                ],
+                correctAnswer: 3,
+                category: "SOC Operations",
+                hint: "The standard SOC workflow progresses from collection to documentation."
+            },
+            {
+                question: "An attacker, in an attempt to exploit the vulnerability in the dynamically generated welcome page, inserted code at the end of the company's URL as follows: http://technosoft.com.com/<script > alert('WARNING:Theapplication hasencounteredan error');< /script>. Identify the attack demonstrated in the above scenario.",
+                options: [
+                    "Cross-site Scripting Attack",
+                    "SQL Injection Attack",
+                    "Denial-of-Service Attack",
+                    "Session Attack"
+                ],
+                correctAnswer: 0,
+                category: "Web Attacks",
+                hint: "Injecting JavaScript code into a URL is a classic XSS attack."
+            },
+            {
+                question: "Which of the following formula represents the risk levels?",
+                options: [
+                    "Level of risk = Consequence × Severity",
+                    "Level of risk = Consequence × Impact",
+                    "Level of risk = Consequence × Likelihood",
+                    "Level of risk = Consequence × Asset Value"
+                ],
+                correctAnswer: 2,
+                category: "Risk Management",
+                hint: "Risk level is typically calculated as consequence multiplied by likelihood."
+            },
+            {
+                question: "In which log collection mechanism, the system or application sends log records either on the local disk or over the network.",
+                options: [
+                    "rule-based",
+                    "push-based",
+                    "pull-based",
+                    "signature-based"
+                ],
+                correctAnswer: 1,
+                category: "Log Management",
+                hint: "Push-based collection involves systems actively sending logs to a collector."
+            },
+            {
+                question: "Which of the following tool can be used to filter web requests associated with the SQL Injection attack?",
+                options: [
+                    "UrlScan",
+                    "Hydra",
+                    "ZAP proxy",
+                    "Nmap"
+                ],
+                correctAnswer: 0,
+                category: "Security Tools",
+                hint: "UrlScan is a security tool that filters and blocks potentially harmful HTTP requests."
+            },
+            {
+                question: "Peter, a SOC analyst with Spade Systems, is monitoring and analyzing the router logs of the company and wanted to check the logs that are generated by access control list numbered 210. What filter should Peter add to the 'show logging' command to get the required output?",
+                options: [
+                    "show logging | access 210",
+                    "show logging | forward 210",
+                    "show logging | include 210",
+                    "show logging | route 210"
+                ],
+                correctAnswer: 2,
+                category: "Network Security",
+                hint: "The 'include' filter is commonly used to search for specific patterns in command output."
+            },
+            {
+                question: "Charline is working as an L2 SOC Analyst. One day, an L1 SOC Analyst escalated an incident to her for further investigation and confirmation. Charline, after a thorough investigation, confirmed the incident and assigned it with an initial priority. What would be her next action according to the SOC workflow?",
+                options: [
+                    "She should immediately escalate this issue to the management",
+                    "She should immediately contact the network administrator to solve the problem",
+                    "She should communicate this incident to the media immediately",
+                    "She should formally raise a ticket and forward it to the IRT"
+                ],
+                correctAnswer: 3,
+                category: "SOC Operations",
+                hint: "After confirmation, incidents are formally documented and escalated to the Incident Response Team."
+            },
+            {
+                question: "Which of the following process refers to the discarding of the packets at the routing level without informing the source that the data did not reach its intended recipient?",
+                options: [
+                    "Load Balancing",
+                    "Rate Limiting",
+                    "Black Hole Filtering",
+                    "Drop Requests"
+                ],
+                correctAnswer: 2,
+                category: "Network Security",
+                hint: "Black hole filtering silently drops packets without sending notification to the source."
+            },
+            {
+                question: "Which of the following HTTP status code indicates a Bad Request?",
+                options: [
+                    "Forbidden Error 403",
+                    "Unauthorized Error 401",
+                    "Internal Server Error 500",
+                    "Not Found Error 404",
+                    "Bad request error 400"
+                ],
+                correctAnswer: 4,
+                category: "Web Security",
+                hint: "HTTP status code 400 indicates a Bad Request due to malformed syntax."
+            },
+            {
+                question: "Which of the following data source can be used to detect the traffic associated with Bad Bot User-Agents?",
+                options: [
+                    "Windows Event Log",
+                    "Web Server Logs",
+                    "Router Logs",
+                    "Switch Logs"
+                ],
+                correctAnswer: 1,
+                category: "Web Security",
+                hint: "Web server logs contain User-Agent strings that can identify malicious bots."
+            },
+            {
+                question: "Identify the password cracking attempt involving a precomputed dictionary of plaintext passwords and their corresponding hash values to crack the password.",
+                options: [
+                    "Dictionary Attack",
+                    "Rainbow Table Attack",
+                    "Bruteforce Attack",
+                    "Syllable Attack"
+                ],
+                correctAnswer: 1,
+                category: "Password Security",
+                hint: "Rainbow tables contain precomputed hash chains for faster password cracking."
+            },
+            {
+                question: "Which attack works like a dictionary attack, but adds some numbers and symbols to the words from the dictionary and tries to crack the password?",
+                options: [
+                    "Hybrid Attack",
+                    "Bruteforce Attack",
+                    "Rainbow Table Attack",
+                    "Birthday Attack"
+                ],
+                correctAnswer: 0,
+                category: "Password Security",
+                hint: "Hybrid attacks combine dictionary words with variations like numbers and symbols."
+            },
+            {
+                question: "Which of the following tool is used to recover from web application incident?",
+                options: [
+                    "CrowdStrike FalconTM Orchestrator",
+                    "Symantec Secure Web Gateway",
+                    "Smoothwall SWG",
+                    "Proxy Workbench"
+                ],
+                correctAnswer: 1,
+                category: "Incident Response Tools",
+                hint: "Secure Web Gateways help protect and recover from web application incidents."
+            },
+            {
+                question: "InfoSystem LLC, a US-based company, is establishing an in-house SOC. John has been given the responsibility to finalize strategy, policies, and procedures for the SOC. Identify the job role of John.",
+                options: [
+                    "Security Engineer",
+                    "Security Analyst - L1",
+                    "Chief Information Security Officer (CISO)",
+                    "Security Analyst - L2"
+                ],
+                correctAnswer: 2,
+                category: "Security Roles",
+                hint: "CISOs are responsible for overall security strategy and policy development."
+            },
+            {
+                question: "Which of the following are the responsibilities of SIEM Agents? 1. Collecting data received from various devices sending data to SIEM before forwarding it to the central engine. 2. Normalizing data received from various devices sending data to SIEM before forwarding it to the central engine. 3. Co-relating data received from various devices sending data to SIEM before forwarding it to the central engine. 4. Visualizing data received from various devices sending data to SIEM before forwarding it to the central engine.",
+                options: [
+                    "1 and 2",
+                    "3 and 1",
+                    "2 and 3",
+                    "1 and 4"
+                ],
+                correctAnswer: 0,
+                category: "SIEM Architecture",
+                hint: "SIEM agents typically handle collection and normalization at the source."
+            },
+            {
+                question: "Jane, a security analyst, while analyzing IDS logs, detected an event matching Regex \\( /((\\%3C)|<)((\\%69)|i|(\\% 49))((\\%6D)|m|(\\%4D))((\\%67)|g|(\\%47))|^n|+((\\%3E)|>) \\). What does this event log indicate?",
+                options: [
+                    "Directory Traversal Attack",
+                    "Parameter Tampering Attack",
+                    "XSS Attack",
+                    "SQL Injection Attack"
+                ],
+                correctAnswer: 2,
+                category: "IDS/IPS",
+                hint: "This regex pattern detects attempts to inject HTML/JavaScript tags (XSS)."
+            },
+            {
+                question: "Which of the following steps of incident handling and response process focus on limiting the scope and extent of an incident?",
+                options: [
+                    "Containment",
+                    "Data Collection",
+                    "Eradication",
+                    "Identification"
+                ],
+                correctAnswer: 0,
+                category: "Incident Response",
+                hint: "Containment aims to prevent the incident from spreading."
+            },
+            {
+                question: "Which of the log storage method arranges event logs in the form of a circular buffer?",
+                options: [
+                    "LIFO",
+                    "FIFO",
+                    "non-wrapping",
+                    "wrapping"
+                ],
+                correctAnswer: 3,
+                category: "Log Management",
+                hint: "Wrapping log storage overwrites old entries when the buffer is full."
+            },
+            {
+                question: "An organization wants to implement a SIEM deployment architecture. However, they have the capability to do only log collection and the rest of the SIEM functions must be managed by an MSSP. Which SIEM deployment architecture will the organization adopt?",
+                options: [
+                    "Cloud, MSSP Managed",
+                    "Self-hosted, Jointly Managed",
+                    "Self-hosted, MSSP Managed",
+                    "Self-hosted, Self-Managed"
+                ],
+                correctAnswer: 2,
+                category: "SIEM Architecture",
+                hint: "Self-hosted with MSSP management allows the organization to maintain control while outsourcing management."
+            },
+            {
+                question: "Banter is a threat analyst in Christine Group of Industries. As a part of the job, he is currently formatting and structuring the raw data. He is at which stage of the threat intelligence life cycle?",
+                options: [
+                    "Dissemination and Integration",
+                    "Processing and Exploitation",
+                    "Collection",
+                    "Analysis and Production"
+                ],
+                correctAnswer: 1,
+                category: "Threat Intelligence",
+                hint: "Processing and exploitation involves structuring and preparing raw data for analysis."
+            },
+            {
+                question: "Which of the following attacks causes sudden changes in file extensions or increase in file renames at rapid speed?",
+                options: [
+                    "Ransomware Attack",
+                    "DoS Attack",
+                    "DHCP starvation Attack",
+                    "File Injection Attack"
+                ],
+                correctAnswer: 0,
+                category: "Malware",
+                hint: "Ransomware typically encrypts files and changes their extensions."
+            },
+            {
+                question: "Which of the following security technology is used to attract and trap people who attempt unauthorized or illicit utilization of the host system?",
+                options: [
+                    "De-Militarized Zone (DMZ)",
+                    "Firewall",
+                    "Honeypot",
+                    "Intrusion Detection System"
+                ],
+                correctAnswer: 2,
+                category: "Security Technologies",
+                hint: "Honeypots are decoy systems designed to attract and study attackers."
+            },
+            {
+                question: "Identify the event severity level in Windows logs for the events that are not necessarily significant, but may indicate a possible future problem.",
+                options: [
+                    "Failure Audit",
+                    "Warning",
+                    "Error",
+                    "Information"
+                ],
+                correctAnswer: 1,
+                category: "Windows Logs",
+                hint: "Warning events indicate potential issues that aren't critical yet."
+            },
+            {
+                question: "Which of the following factors determine the choice of SIEM architecture?",
+                options: [
+                    "SMTP Configuration",
+                    "DHCP Configuration",
+                    "DNS Configuration",
+                    "Network Topology"
+                ],
+                correctAnswer: 3,
+                category: "SIEM Architecture",
+                hint: "Network topology significantly influences SIEM deployment decisions."
+            },
+            {
+                question: "Which of the following Windows event is logged every time when a user tries to access the 'Registry' key?",
+                options: [
+                    "4656",
+                    "4663",
+                    "4660",
+                    "4657"
+                ],
+                correctAnswer: 1,
+                category: "Windows Security",
+                hint: "Event ID 4656 indicates a handle to an object was requested (registry access)."
+            },
+            {
+                question: "Sam, a security analyst with INFOSOL INC., while monitoring and analyzing IIS logs, detected an event matching regex /\\w*((\\%27)|('))((\\%6F)|o|(\\%4F))((\\%72)|r|(\\%52))/ix. What does this event log indicate?",
+                options: [
+                    "SQL Injection Attack",
+                    "Parameter Tampering Attack",
+                    "XSS Attack",
+                    "Directory Traversal Attack"
+                ],
+                correctAnswer: 0,
+                category: "Web Attacks",
+                hint: "This regex detects SQL injection attempts using the 'or' operator."
+            },
+            {
+                question: "Which of the following framework describes the essential characteristics of an organization's security engineering process that must exist to ensure good security engineering?",
+                options: [
+                    "COBIT",
+                    "ITIL",
+                    "SSE-CMM",
+                    "SOC-CMM"
+                ],
+                correctAnswer: 2,
+                category: "Security Frameworks",
+                hint: "SSE-CMM stands for Systems Security Engineering Capability Maturity Model."
+            },
+            {
+                question: "What does Windows event ID 4740 indicate?",
+                options: [
+                    "A user account was locked out.",
+                    "A user account was disabled.",
+                    "A user account was enabled.",
+                    "A user account was created."
+                ],
+                correctAnswer: 0,
+                category: "Windows Security",
+                hint: "Event ID 4740 records user account lockout events."
+            },
+            {
+                question: "Which of the following is a Threat Intelligence Platform?",
+                options: [
+                    "SolarWinds MS",
+                    "TC Complete",
+                    "Keepnote",
+                    "Ability.io"
+                ],
+                correctAnswer: 1,
+                category: "Threat Intelligence",
+                hint: "SolarWinds offers threat intelligence platforms."
+            },
+            {
+                question: "A type of threat intelligent that find out the information about the attacker by misleading them is known as ______.",
+                options: [
+                    "Threat trending Intelligence",
+                    "Detection Threat Intelligence",
+                    "Operational Intelligence",
+                    "Counter Intelligence"
+                ],
+                correctAnswer: 3,
+                category: "Threat Intelligence",
+                hint: "Counter intelligence involves deceiving attackers to gather information about them."
+            },
+            {
+                question: "Chloe, a SOC analyst with Jake Tech, is checking Linux systems logs. She is investigating files at /var/log/wtmp. What Chloe is looking at?",
+                options: [
+                    "Error log",
+                    "System boot log",
+                    "General message and system-related stuff",
+                    "Login records"
+                ],
+                correctAnswer: 3,
+                category: "Linux Logs",
+                hint: "/var/log/wtmp stores login records in Linux systems."
+            },
+            {
+                question: "Which of the following threat intelligence is used by a SIEM for supplying the analysts with context and 'situational awareness' by using threat actor TTPs, malware campaigns, tools used by threat actors?",
+                options: [
+                    "2 and 3 (Tactical and Operational)",
+                    "1 and 3 (Strategic and Operational)",
+                    "3 and 4 (Operational and Technical)",
+                    "1 and 2 (Strategic and Tactical)"
+                ],
+                correctAnswer: 0,
+                category: "Threat Intelligence",
+                hint: "Operational and technical intelligence provide actionable context for SOC analysts."
+            },
+            {
+                question: "Properly applied cyber threat intelligence to the SOC team help them in discovering TTPs. What does these TTPs refer to?",
+                options: [
+                    "Tactics, Techniques, and Procedures",
+                    "Tactics, Threats, and Procedures",
+                    "Targets, Threats, and Process",
+                    "Tactics, Targets, and Process"
+                ],
+                correctAnswer: 0,
+                category: "Threat Intelligence",
+                hint: "TTPs describe how threat actors operate."
+            },
+            {
+                question: "Daniel is a member of an IRT, which was started recently in a company named Mesh Tech. He wanted to find the purpose and scope of the planned incident response capabilities. What is he looking for?",
+                options: [
+                    "Incident Response Intelligence",
+                    "Incident Response Mission",
+                    "Incident Response Vision",
+                    "Incident Response Resources"
+                ],
+                correctAnswer: 1,
+                category: "Incident Response",
+                hint: "Incident Response Vision outlines the long-term goals and scope of IR capabilities."
+            },
+            {
+                question: "John, a SOC analyst, while monitoring and analyzing Apache web server logs, identified an event log matching Regex /(\\.|(%|%25)2E)(\\.|(%|%25)2E)(\\.|((%|%25)2F|\\.|((%|%25)5C)/i. What does this event log indicate?",
+                options: [
+                    "XSS Attack",
+                    "SQL injection Attack",
+                    "Directory Traversal Attack",
+                    "Parameter Tampering Attack"
+                ],
+                correctAnswer: 2,
+                category: "Web Attacks",
+                hint: "This regex detects directory traversal attempts using '../' sequences."
+            },
+            {
+                question: "According to the Risk Matrix table, what will be the risk level when the probability of an attack is very high, and the impact of that attack is major?",
+                options: [
+                    "High",
+                    "Extreme",
+                    "Low",
+                    "Medium"
+                ],
+                correctAnswer: 1,
+                category: "Risk Management",
+                hint: "Very high probability combined with major impact results in extreme risk."
+            },
+            {
+                question: "Which of the following threat intelligence helps cyber security professionals such as security operations managers, network operations center and incident responders to understand how the adversaries are expected to perform the attack on the organization, and the technical capabilities and goals of the attackers along with the attack vectors?",
+                options: [
+                    "Analytical Threat Intelligence",
+                    "Operational Threat Intelligence",
+                    "Strategic Threat Intelligence",
+                    "Tactical Threat Intelligence"
+                ],
+                correctAnswer: 3,
+                category: "Threat Intelligence",
+                hint: "Tactical threat intelligence focuses on the immediate threats and attack methods."
+            },
+            {
+                question: "Emmanuel is working as a SOC analyst in a company named Tobey Tech. The manager of Tobey Tech recently recruited an Incident Response Team (IRT) for his company. In the process of collaboration with the IRT, Emmanuel just escalated an incident to the IRT. What is the first step that the IRT will do to the incident escalated by Emmanuel?",
+                options: [
+                    "Incident Analysis and Validation",
+                    "Incident Recording",
+                    "Incident Classification",
+                    "Incident Prioritization"
+                ],
+                correctAnswer: 0,
+                category: "Incident Response",
+                hint: "The first step after receiving an incident report is to formally record it."
+            },
+            {
+                question: "Identify the HTTP status codes that represents the server error.",
+                options: [
+                    "1XX",
+                    "5XX",
+                    "4XX",
+                    "2XX"
+                ],
+                correctAnswer: 1,
+                category: "Web Security",
+                hint: "5XX status codes indicate server-side errors."
+            },
+            {
+                question: "Wesley is an incident handler in a company named Maddison Tech. One day, he was learning techniques for eradicating the insecure deserialization attacks. What among the following should Wesley avoid from considering?",
+                options: [
+                    "Deserialization of trusted data must cross a trust boundary",
+                    "Understand the security permissions given to serialization and deserialization",
+                    "Allow serialization for security-sensitive classes",
+                    "Validate untrusted input, which is to be serialized to ensure that serialized data contain only trusted classes"
+                ],
+                correctAnswer: 2,
+                category: "Application Security",
+                hint: "Security-sensitive classes should generally not be serializable."
+            },
+            {
+                question: "Which of the following Windows Event Id will help you monitors file sharing across the network?",
+                options: [
+                    "5140",
+                    "7045",
+                    "4624",
+                    "4625"
+                ],
+                correctAnswer: 0,
+                category: "Windows Security",
+                hint: "Event ID 5140 monitors network share access."
+            },
+            {
+                question: "Which of the following data source will a SOC Analyst use to monitor connections to the insecure ports?",
+                options: [
+                    "IIS Data",
+                    "DNS Data",
+                    "DHCP Data",
+                    "Netstat Data"
+                ],
+                correctAnswer: 3,
+                category: "Network Security",
+                hint: "Netstat provides information about network connections and listening ports."
+            },
+            {
+                question: "Identify the type of attack, an attacker is attempting on www.example.com website. (( check an image file reff from the CSA demo qus Doc ))",
+                options: [
+                    "SQL Injection Attack",
+                    "Cross-site Scripting Attack",
+                    "Denial-of-Service Attack",
+                    "Session Attack"
+                ],
+                correctAnswer: 1,
+                category: "Web Attacks",
+                hint: "The scenario describes injecting script tags into a URL, which is XSS."
+            },
+            {
+                question: "Which of the following attack can be eradicated by disabling of 'allow_url_topen and allow_url_include' in the php.ini file?",
+                options: [
+                    "LDAP Injection Attacks",
+                    "Command Injection Attacks",
+                    "File Injection Attacks",
+                    "URL Injection Attacks"
+                ],
+                correctAnswer: 3,
+                category: "PHP Security",
+                hint: "Disabling URL fopen/include prevents remote file inclusion attacks."
+            },
+            {
+                question: "According to the Risk Matrix table, what will be the risk level when the probability of an attack is very low and the impact of that attack is major?",
+                options: [
+                    "High",
+                    "Medium",
+                    "Low",
+                    "Extreme"
+                ],
+                correctAnswer: 1,
+                category: "Risk Management",
+                hint: "Low probability with major impact typically results in medium risk."
+            },
+            {
+                question: "Which of the following attack can be eradicated by converting all non-alphanumeric characters to HTML character entities before displaying the user input in search engines and forums?",
+                options: [
+                    "Broken Access Control Attacks",
+                    "Web Services Attacks",
+                    "XSS Attacks",
+                    "Session Management Attacks"
+                ],
+                correctAnswer: 2,
+                category: "Web Security",
+                hint: "HTML encoding prevents XSS by neutralizing script tags."
+            },
+            {
+                question: "Jony, a security analyst, while monitoring IIS logs, identified events shown in the figure below. What does this event log indicate?  (( check an image file reff from the CSA demo qus Doc ))",
+                options: [
+                    "Parameter Tampering Attack",
+                    "XSS Attack",
+                    "Directory Traversal Attack",
+                    "SQL Injection Attack"
+                ],
+                correctAnswer: 3,
+                category: "Web Attacks",
+                hint: "Based on typical IIS log patterns, this appears to be SQL injection."
+            },
+            {
+                question: "David is a SOC analyst in Karen Tech. One day an attack is initiated by the intruders but David was not able to find any suspicious events. This type of incident is categorized into __________?",
+                options: [
+                    "True Positive Incidents",
+                    "False positive Incidents",
+                    "True Negative Incidents",
+                    "False Negative Incidents"
+                ],
+                correctAnswer: 3,
+                category: "SOC Operations",
+                hint: "False negatives are attacks that go undetected by security systems."
+            },
+            {
+                question: "If the SIEM generates the following four alerts at the same time: I. Firewall blocking traffic from getting into the network alerts II. SQL injection attempt alerts III. Data deletion attempt alerts IV. Brute-force attempt alerts Which alert should be given least priority as per effective alert triaging?",
+                options: [
+                    "III",
+                    "IV",
+                    "II",
+                    "I"
+                ],
+                correctAnswer: 3,
+                category: "Alert Management",
+                hint: "Firewall blocks are typically lower priority as they indicate successful prevention."
+            },
+            {
+                question: "Which of the following stage executed after identifying the required event sources?",
+                options: [
+                    "Identifying the monitoring Requirements",
+                    "Defining Rule for the Use Case",
+                    "Implementing and Testing the Use Case",
+                    "Validating the event source against monitoring requirement"
+                ],
+                correctAnswer: 3,
+                category: "SIEM Implementation",
+                hint: "After identifying sources, validate they provide the needed data."
+            },
+            {
+                question: "Identify the attack in which the attacker exploits a target system through publicly known but still unpatched vulnerabilities.",
+                options: [
+                    "Slow DoS Attack",
+                    "DHCP Starvation",
+                    "Zero-Day Attack",
+                    "DNS Poisoning Attack"
+                ],
+                correctAnswer: 2,
+                category: "Vulnerabilities",
+                hint: "Zero-day attacks exploit vulnerabilities before patches are available."
+            },
+            {
+                question: "Which of the following contains the performance measures, and proper project and time management details?",
+                options: [
+                    "Incident Response Policy",
+                    "Incident Response Tactics",
+                    "Incident Response Process",
+                    "Incident Response Procedures"
+                ],
+                correctAnswer: 3,
+                category: "Incident Response",
+                hint: "Procedures contain detailed steps including performance measures."
+            },
+            {
+                question: "In which of the following incident handling and response stages, the root cause of the incident must be found from the forensic results?",
+                options: [
+                    "Evidence Gathering",
+                    "Evidence Handling",
+                    "Eradication",
+                    "Systems Recovery"
+                ],
+                correctAnswer: 2,
+                category: "Incident Response",
+                hint: "Eradication involves removing the root cause identified through forensics."
+            },
+            {
+                question: "Jason , a SOC Analyst with Maximus Tech, was investigating Cisco ASA Firewall logs and came across: May 06 2018 21:27:27 asa 1: %ASA -5 - 11008: User 'enable_15' executed the 'configure term' command What does the security level in the above log indicates?",
+                options: [
+                    "Warning condition message",
+                    "Critical condition message",
+                    "Normal but significant message",
+                    "Informational message"
+                ],
+                correctAnswer: 2,
+                category: "Firewall Logs",
+                hint: "Cisco ASA severity level 5 indicates 'Notifications' (normal but significant)."
+            },
+            {
+                question: "Which of the following fields in Windows logs defines the type of event occurred, such as Correlation Hint, Response Time, SQM, WDI Context, and so on?",
+                options: [
+                    "Keywords",
+                    "Task Category",
+                    "Level",
+                    "Source"
+                ],
+                correctAnswer: 0,
+                category: "Windows Logs",
+                hint: "Keywords field provides additional categorization information."
+            },
+            {
+                question: "An attacker, in an attempt to exploit the vulnerability in the dynamically generated welcome page, inserted code at the end of the company's URL as follows:",
+                options: [
+                    "Cross-site Scripting Attack",
+                    "SQL Injection Attack",
+                    "Denial-of-Service Attack",
+                    "Session Attack"
+                ],
+                correctAnswer: 0,
+                category: "Web Attacks",
+                hint: "Code injection in URLs is characteristic of XSS attacks."
+            },
+            {
+                question: "John as a SOC analyst is worried about the amount of Tor traffic hitting the network. He wants to prepare a dashboard in the SIEM to get a graph to identify the locations from where the TOR traffic is coming. Which of the following data source will he use to prepare the dashboard?",
+                options: [
+                    "DHCP/Logs capable of maintaining IP addresses or hostnames with IPtoName resolution.",
+                    "IIS/Web Server logs with IP addresses and user agent IPtouseragent resolution.",
+                    "DNS/ Web Server logs with IP addresses.",
+                    "Apache/ Web Server logs with IP addresses and Host Name."
+                ],
+                correctAnswer: 2,
+                category: "Network Monitoring",
+                hint: "Web server logs with IP and user agent info can help identify Tor traffic patterns."
+            },
+            {
+                question: "The threat intelligence, which will help you, understand adversary intent and make informed decision to ensure appropriate security in alignment with risk. What kind of threat intelligence described above?",
+                options: [
+                    "Tactical Threat Intelligence",
+                    "Strategic Threat Intelligence",
+                    "Functional Threat Intelligence",
+                    "Operational Threat Intelligence"
+                ],
+                correctAnswer: 1,
+                category: "Threat Intelligence",
+                hint: "Strategic intelligence helps with high-level decision making and risk alignment."
+            },
+            {
+                question: "Which of the following is a correct flow of the stages in an incident handling and response (IH&R) process?",
+                options: [
+                    "Containment -> Incident Recording -> Incident Triage -> Preparation -> Recovery -> Eradication -> Post-Incident Activities",
+                    "Preparation -> Incident Recording -> Incident Triage -> Containment -> Eradication -> Recovery -> Post-Incident Activities",
+                    "Incident Triage -> Eradication -> Containment -> Incident Recording -> Preparation -> Recovery -> Post-Incident Activities",
+                    "Incident Recording -> Preparation -> Containment -> Incident Triage -> Recovery -> Eradication -> Post-Incident Activities"
+                ],
+                correctAnswer: 1,
+                category: "Incident Response",
+                hint: "Preparation comes first, followed by detection, containment, eradication, recovery, and lessons learned."
+            },
+            {
+                question: "Rinni, SOC analyst, while monitoring IDS logs detected events shown in the figure below. What does this event log indicate?  (( check an image file reff from the CSA demo qus Doc ))",
+                options: [
+                    "Directory Traversal Attack",
+                    "XSS Attack",
+                    "SQL Injection Attack",
+                    "Parameter Tampering Attack"
+                ],
+                correctAnswer: 3,
+                category: "Web Attacks",
+                hint: "The log shows parameter manipulation in URLs, indicating parameter tampering."
+            }
+
+        ];
+
+        // Quiz State
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let answerHistory = [];
+        let shuffledQuizData = [];
+        let optionOrders = [];
+        
+        // Timer State
+        let quizTimer = {
+            startTime: null,
+            elapsedTime: 0,
+            timerInterval: null,
+            isRunning: false,
+            questionStartTimes: [],
+            questionTimes: []
+        };
+        
+        // Review Mode State
+        let isReviewMode = false;
+        
+        // DOM Elements
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const currentQuestionElement = document.getElementById('current-question');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const timerDisplay = document.getElementById('timer-display');
+        const progressFill = document.getElementById('progress-fill');
+        const progressPercent = document.getElementById('progress-percent');
+        const historyList = document.getElementById('history-list');
+        const questionHistoryText = document.getElementById('question-history-text');
+        const questionCategory = document.getElementById('question-category');
+        const notification = document.getElementById('notification');
+        const shuffleInfo = document.getElementById('shuffle-info');
+        const reviewModeBanner = document.getElementById('review-mode-banner');
+        
+        // Results Modal Elements
+        const resultsModal = document.getElementById('results-modal');
+        const finalScoreElement = document.getElementById('final-score');
+        const finalTimeElement = document.getElementById('final-time');
+        const correctCountElement = document.getElementById('correct-count');
+        const startTimeElement = document.getElementById('start-time');
+        const endTimeElement = document.getElementById('end-time');
+        const timePerQuestionElement = document.getElementById('time-per-question');
+        const resultsMessage = document.getElementById('results-message');
+        
+        // Buttons
+        const previousBtn = document.getElementById('previous-btn');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const hintBtn = document.getElementById('hint-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const newQuizBtn = document.getElementById('new-quiz-btn');
+        const closeResultsBtn = document.getElementById('close-results-btn');
+        
+        // Helper function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        // Format time as MM:SS or HH:MM:SS
+        function formatTime(seconds) {
+            const hrs = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            const secs = Math.floor(seconds % 60);
+            
+            if (hrs > 0) {
+                return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            } else {
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Format date/time
+        function formatDateTime(date) {
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+        }
+        
+        // Start the quiz timer
+        function startTimer() {
+            if (!quizTimer.isRunning && !isReviewMode) {
+                quizTimer.startTime = new Date();
+                quizTimer.isRunning = true;
+                
+                quizTimer.timerInterval = setInterval(() => {
+                    quizTimer.elapsedTime = Math.floor((new Date() - quizTimer.startTime) / 1000);
+                    timerElement.textContent = formatTime(quizTimer.elapsedTime);
+                }, 1000);
+                
+                // Record start time for current question
+                quizTimer.questionStartTimes[currentQuestionIndex] = new Date();
+            }
+        }
+        
+        // Record time spent on a question
+        function recordQuestionTime() {
+            if (quizTimer.questionStartTimes[currentQuestionIndex]) {
+                const questionEndTime = new Date();
+                const timeSpent = Math.floor((questionEndTime - quizTimer.questionStartTimes[currentQuestionIndex]) / 1000);
+                quizTimer.questionTimes[currentQuestionIndex] = timeSpent;
+            }
+        }
+        
+        // Stop the quiz timer
+        function stopTimer() {
+            if (quizTimer.isRunning) {
+                clearInterval(quizTimer.timerInterval);
+                quizTimer.isRunning = false;
+            }
+        }
+        
+        // Show or hide timer based on review mode
+        function toggleTimerDisplay() {
+            if (isReviewMode) {
+                timerDisplay.classList.add('hidden');
+                reviewModeBanner.style.display = 'flex';
+            } else {
+                timerDisplay.classList.remove('hidden');
+                reviewModeBanner.style.display = 'none';
+            }
+        }
+        
+        // Calculate average time per question
+        function calculateAverageTime() {
+            const answeredQuestions = quizTimer.questionTimes.filter(time => time !== undefined);
+            if (answeredQuestions.length === 0) return 0;
+            
+            const totalTime = answeredQuestions.reduce((sum, time) => sum + time, 0);
+            return Math.floor(totalTime / answeredQuestions.length);
+        }
+        
+        // Shuffle questions and options
+        function shuffleQuiz() {
+            // Shuffle the questions
+            shuffledQuizData = shuffleArray([...originalQuizData]);
+            
+            // Reset option orders array
+            optionOrders = [];
+            
+            // Reset timer data for questions
+            quizTimer.questionStartTimes = [];
+            quizTimer.questionTimes = [];
+            
+            // Shuffle options for each question and track the new order
+            shuffledQuizData.forEach((question, index) => {
+                // Create an array of option indices [0, 1, 2, 3, ...]
+                const optionIndices = Array.from({length: question.options.length}, (_, i) => i);
+                
+                // Shuffle the option indices
+                const shuffledIndices = shuffleArray(optionIndices);
+                
+                // Store the mapping of original index to shuffled index
+                optionOrders[index] = shuffledIndices;
+                
+                // Update the correct answer to reflect the new position
+                const originalCorrectIndex = question.correctAnswer;
+                const newCorrectIndex = shuffledIndices.indexOf(originalCorrectIndex);
+                
+                // Update the question with shuffled options and new correct answer
+                const shuffledOptions = shuffledIndices.map(idx => question.options[idx]);
+                
+                shuffledQuizData[index] = {
+                    ...question,
+                    options: shuffledOptions,
+                    correctAnswer: newCorrectIndex,
+                    originalCorrectAnswer: originalCorrectIndex
+                };
+            });
+            
+            // Update shuffle info with date/time
+            const now = new Date();
+            shuffleInfo.innerHTML = `<i class="fas fa-random"></i> Last reset on ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+        }
+        
+        // Initialize Quiz
+        function initQuiz() {
+            // Initial shuffle
+            shuffleQuiz();
+            
+            totalQuestionsElement.textContent = shuffledQuizData.length;
+            userAnswers = new Array(shuffledQuizData.length).fill(null);
+            
+            // Reset review mode
+            isReviewMode = false;
+            toggleTimerDisplay();
+            
+            updateQuestion();
+            updateProgress();
+            updateScore();
+            updateHistory();
+            
+            // Reset timer
+            quizTimer.elapsedTime = 0;
+            timerElement.textContent = "00:00";
+            
+            // Event Listeners
+            previousBtn.addEventListener('click', goToPreviousQuestion);
+            nextBtn.addEventListener('click', goToNextQuestion);
+            submitBtn.addEventListener('click', submitAnswer);
+            hintBtn.addEventListener('click', showHint);
+            resetBtn.addEventListener('click', resetQuiz);
+            reviewBtn.addEventListener('click', reviewAnswers);
+            newQuizBtn.addEventListener('click', startNewQuiz);
+            closeResultsBtn.addEventListener('click', closeResults);
+            
+            // Add event listeners to options (will be re-attached when options are regenerated)
+            attachOptionListeners();
+        }
+        
+        // Attach event listeners to options
+        function attachOptionListeners() {
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', selectOption);
+            });
+        }
+        
+        // Update question display
+        function updateQuestion() {
+            const currentQuestion = shuffledQuizData[currentQuestionIndex];
+            
+            questionText.textContent = currentQuestion.question;
+            questionCategory.textContent = currentQuestion.category;
+            currentQuestionElement.textContent = currentQuestionIndex + 1;
+            
+            // Clear and regenerate options
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach((optionText, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.setAttribute('data-index', index);
+                
+                optionElement.innerHTML = `
+                    <div class="option-number">${index + 1}</div>
+                    <div class="option-text">${optionText}</div>
+                `;
+                
+                // If user has already answered this question, show the result
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    if (index === currentQuestion.correctAnswer) {
+                        optionElement.classList.add('correct');
+                    } else if (index === userAnswers[currentQuestionIndex] && index !== currentQuestion.correctAnswer) {
+                        optionElement.classList.add('incorrect');
+                    }
+                    
+                    if (index === userAnswers[currentQuestionIndex]) {
+                        optionElement.classList.add('selected');
+                    }
+                }
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update question history text
+            updateQuestionHistory();
+            
+            // Update button states
+            previousBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = currentQuestionIndex === shuffledQuizData.length - 1;
+            
+            // Disable submit button in review mode or if already answered
+            if (isReviewMode || userAnswers[currentQuestionIndex] !== null) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-lock"></i> Answered';
+            } else {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Answer <i class="fas fa-paper-plane"></i>';
+            }
+            
+            // Start timer if it's not running (first question) and not in review mode
+            if (!quizTimer.isRunning && currentQuestionIndex === 0 && !isReviewMode) {
+                startTimer();
+            }
+            
+            // Record time for previous question and start timer for current (if not in review mode)
+            if (currentQuestionIndex > 0 && !isReviewMode) {
+                recordQuestionTime();
+            }
+            
+            // Start timer for current question (if not in review mode)
+            if (!isReviewMode) {
+                quizTimer.questionStartTimes[currentQuestionIndex] = new Date();
+            }
+            
+            // Re-attach event listeners to new options
+            attachOptionListeners();
+        }
+        
+        // Select an option
+        function selectOption(event) {
+            // If in review mode or already answered, don't allow selection
+            if (isReviewMode || userAnswers[currentQuestionIndex] !== null) return;
+            
+            const selectedOption = event.currentTarget;
+            const selectedIndex = parseInt(selectedOption.getAttribute('data-index'));
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            selectedOption.classList.add('selected');
+            
+            // Enable submit button
+            submitBtn.disabled = false;
+        }
+        
+        // Submit answer
+        function submitAnswer() {
+            const selectedOption = document.querySelector('.option.selected');
+            
+            if (!selectedOption) {
+                showNotification('Please select an answer before submitting.', 'incorrect');
+                return;
+            }
+            
+            const selectedIndex = parseInt(selectedOption.getAttribute('data-index'));
+            const correctAnswer = shuffledQuizData[currentQuestionIndex].correctAnswer;
+            
+            // Store user's answer
+            userAnswers[currentQuestionIndex] = selectedIndex;
+            
+            // Record time for this question (if not in review mode)
+            if (!isReviewMode) {
+                recordQuestionTime();
+            }
+            
+            // Check if answer is correct
+            const isCorrect = selectedIndex === correctAnswer;
+            
+            // Update score if correct
+            if (isCorrect) {
+                score += 10;
+                updateScore();
+                showNotification('Correct! Well done!', 'correct');
+            } else {
+                showNotification('Incorrect. The right answer is highlighted in green.', 'incorrect');
+            }
+            
+            // Highlight correct and incorrect answers
+            document.querySelectorAll('.option').forEach((option, index) => {
+                if (index === correctAnswer) {
+                    option.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Add to answer history
+            addToHistory(isCorrect);
+            
+            // Update history display
+            updateHistory();
+            
+            // Disable submit button after answering
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-lock"></i> Answered';
+            
+            // Update progress
+            updateProgress();
+            
+            // Check if all questions are answered (only if not in review mode)
+            if (!isReviewMode) {
+                checkQuizCompletion();
+            }
+        }
+        
+        // Check if quiz is complete
+        function checkQuizCompletion() {
+            const allAnswered = userAnswers.every(answer => answer !== null);
+            
+            if (allAnswered) {
+                // Stop the timer
+                stopTimer();
+                
+                // Show results after a short delay
+                setTimeout(showResults, 1000);
+            }
+        }
+        
+        // Show results modal
+        function showResults() {
+            // Calculate stats
+            const correctAnswers = userAnswers.filter((answer, index) => 
+                answer === shuffledQuizData[index].correctAnswer
+            ).length;
+            
+            const totalQuestions = shuffledQuizData.length;
+            const finalScore = correctAnswers * 10;
+            const totalTime = quizTimer.elapsedTime;
+            const avgTime = calculateAverageTime();
+            
+            // Update results modal
+            finalScoreElement.textContent = finalScore;
+            finalTimeElement.textContent = formatTime(totalTime);
+            correctCountElement.textContent = `${correctAnswers}/${totalQuestions}`;
+            
+            // Set start and end times
+            if (quizTimer.startTime) {
+                startTimeElement.textContent = formatDateTime(quizTimer.startTime);
+                
+                const endTime = new Date(quizTimer.startTime.getTime() + (totalTime * 1000));
+                endTimeElement.textContent = formatDateTime(endTime);
+            }
+            
+            timePerQuestionElement.textContent = `${avgTime}s`;
+            
+            // Set results message based on performance
+            let message = "";
+            const percentage = (correctAnswers / totalQuestions) * 100;
+            
+            if (percentage >= 90) {
+                message = "Outstanding! You're a cybersecurity expert! Perfect score!";
+            } else if (percentage >= 75) {
+                message = "Excellent work! You have strong cybersecurity knowledge.";
+            } else if (percentage >= 60) {
+                message = "Good job! You have a solid understanding of cybersecurity concepts.";
+            } else if (percentage >= 50) {
+                message = "Not bad! You have basic cybersecurity knowledge but could use more study.";
+            } else {
+                message = "Keep learning! Cybersecurity is an important skill that takes time to master.";
+            }
+            
+            // Add time comment
+            const timeComment = totalTime < 60 ? "Lightning fast!" : 
+                               totalTime < 120 ? "Good pace!" : 
+                               totalTime < 180 ? "Average time." : 
+                               "Take your time to understand each question.";
+            
+            resultsMessage.textContent = `${message} You completed the quiz in ${formatTime(totalTime)}. ${timeComment}`;
+            
+            // Show modal
+            resultsModal.classList.add('show');
+        }
+        
+        // Go to next question
+        function goToNextQuestion() {
+            if (currentQuestionIndex < shuffledQuizData.length - 1) {
+                currentQuestionIndex++;
+                updateQuestion();
+            }
+        }
+        
+        // Go to previous question
+        function goToPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateQuestion();
+            }
+        }
+        
+        // Show hint
+        function showHint() {
+            const hint = shuffledQuizData[currentQuestionIndex].hint;
+            showNotification(hint, 'info');
+        }
+        
+        // Reset and shuffle quiz
+        function resetQuiz() {
+            if (confirm('Are you sure you want to reset the Exam? All progress will be lost.')) {
+                // Stop timer
+                stopTimer();
+                
+                // Shuffle questions and options
+                shuffleQuiz();
+                
+                // Reset quiz state
+                currentQuestionIndex = 0;
+                score = 0;
+                userAnswers = new Array(shuffledQuizData.length).fill(null);
+                answerHistory = [];
+                
+                // Reset timer
+                quizTimer.startTime = null;
+                quizTimer.elapsedTime = 0;
+                quizTimer.isRunning = false;
+                quizTimer.questionStartTimes = [];
+                quizTimer.questionTimes = [];
+                
+                // Exit review mode
+                isReviewMode = false;
+                toggleTimerDisplay();
+                
+                updateQuestion();
+                updateScore();
+                updateProgress();
+                updateHistory();
+                
+                // Reset timer display
+                timerElement.textContent = "00:00";
+                
+                // Close results modal if open
+                resultsModal.classList.remove('show');
+                
+                showNotification('Exam has been restarted! Timer has been reset.', 'info');
+            }
+        }
+        
+        // Review answers - enter review mode
+        function reviewAnswers() {
+            // Set review mode
+            isReviewMode = true;
+            
+            // Stop timer if it's running
+            stopTimer();
+            
+            // Hide timer display
+            toggleTimerDisplay();
+            
+            // Close results modal
+            resultsModal.classList.remove('show');
+            
+            // Go to first question
+            currentQuestionIndex = 0;
+            updateQuestion();
+            
+            showNotification('You are now in review mode. Timer is hidden. You can review all questions and answers.', 'info');
+        }
+        
+        // Start new quiz
+        function startNewQuiz() {
+            // Close results modal
+            resultsModal.classList.remove('show');
+            
+            // Reset the quiz
+            resetQuiz();
+        }
+        
+        // Close results modal
+        function closeResults() {
+            resultsModal.classList.remove('show');
+        }
+        
+        // Update progress bar
+        function updateProgress() {
+            const answeredCount = userAnswers.filter(answer => answer !== null).length;
+            const progressPercentage = (answeredCount / shuffledQuizData.length) * 100;
+            
+            progressFill.style.width = `${progressPercentage}%`;
+            progressPercent.textContent = `${Math.round(progressPercentage)}%`;
+        }
+        
+        // Update score display
+        function updateScore() {
+            scoreElement.textContent = score;
+        }
+        
+        // Update answer history
+        function updateHistory() {
+            historyList.innerHTML = '';
+            
+            if (answerHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-item">No answers submitted yet.</div>';
+                return;
+            }
+            
+            // Show only the last 5 history items
+            const recentHistory = answerHistory.slice(-5);
+            
+            recentHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = `history-item ${item.isCorrect ? 'correct' : 'incorrect'}`;
+                
+                const questionNumber = item.questionIndex + 1;
+                const status = item.isCorrect ? 'Correct' : 'Incorrect';
+                const points = item.isCorrect ? '+10' : '+0';
+                
+                historyItem.innerHTML = `
+                    <strong>Q${questionNumber}:</strong> ${status} <span style="float: right;">${points}</span>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+        
+        // Add to answer history
+        function addToHistory(isCorrect) {
+            answerHistory.push({
+                questionIndex: currentQuestionIndex,
+                isCorrect: isCorrect,
+                timestamp: new Date().toLocaleTimeString()
+            });
+        }
+        
+        // Update question history text
+        function updateQuestionHistory() {
+            const currentQuestion = shuffledQuizData[currentQuestionIndex];
+            
+            if (isReviewMode) {
+                const isCorrect = userAnswers[currentQuestionIndex] === currentQuestion.correctAnswer;
+                questionHistoryText.textContent = `You ${isCorrect ? 'correctly answered' : 'answered incorrectly'} this question in review mode. ${isCorrect ? 'Great job!' : 'The correct answer is option ' + (currentQuestion.correctAnswer + 1) + '.'}`;
+                return;
+            }
+            
+            // Default text for first question
+            if (currentQuestionIndex === 0 && userAnswers[0] === null) {
+                questionHistoryText.textContent = "This is the first question of the quiz. Answer options are randomly ordered each time you reset the quiz.";
+                return;
+            }
+            
+            // Text based on whether the question was answered
+            if (userAnswers[currentQuestionIndex] !== null) {
+                const isCorrect = userAnswers[currentQuestionIndex] === currentQuestion.correctAnswer;
+                questionHistoryText.textContent = `You ${isCorrect ? 'correctly answered' : 'answered incorrectly'} this question. ${isCorrect ? 'Great job!' : 'The correct answer is option ' + (currentQuestion.correctAnswer + 1) + '.'}`;
+            } else {
+                questionHistoryText.textContent = `This question is about ${currentQuestion.category.toLowerCase()}. You haven't answered it yet. Note that answer options are randomly ordered.`;
+            }
+        }
+        
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notificationText = notification.querySelector('.notification-text');
+            const notificationIcon = notification.querySelector('i');
+            
+            notificationText.textContent = message;
+            notification.className = `notification ${type}`;
+            
+            // Set icon based on type
+            if (type === 'correct') {
+                notificationIcon.className = 'fas fa-check-circle';
+            } else if (type === 'incorrect') {
+                notificationIcon.className = 'fas fa-exclamation-circle';
+            } else {
+                notificationIcon.className = 'fas fa-info-circle';
+            }
+            
+            // Show notification
+            notification.classList.add('show');
+            
+            // Hide after 4 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 4000);
+        }
+        
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', initQuiz);
+    </script>
+</body>
+</html>
